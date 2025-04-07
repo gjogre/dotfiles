@@ -5,7 +5,7 @@
                     :y "20%"
                     :x "10px"
                     :height "95%"
-                    :width "200px"
+                    :width "11%"
                     :anchor "right center"
                     )
            :stacking "fg"
@@ -13,22 +13,68 @@
            :wm-ignore false
            :namespace "eww-gjogre-main"
            :windowtype "dock"
-           (timedate)
+           (sidepanel)
  )
 
-(defwidget timedate []
-(box :orientation "v" :space-evenly false
-(label
-     :class "clock"
-     :valign "start"
-     :text "${time}")
- (label
-    :class "date"
-    :valign "start"
-    :text "${date}")
+(defwidget sidepanel []
+    (box :orientation "v" :space-evenly false
+        (clock)
+        (sys-info)
+        (fun)
 ))
 
 (defpoll time :interval "5s"
-  "date +'%H:%M'")
+    "date +'%H:%M'")
 (defpoll date :interval "20s"
-"date +'%a %d.%m.%Y'")
+    "date +'%a %d.%m.%Y'")
+
+(defwidget clock []
+    (box
+        :orientation "v"
+        :spacing 5
+        (label
+            :class "clock"
+            :valign "start"
+            :text "${time}")
+        (label
+            :class "date"
+            :valign "start"
+            :text "${date}")
+    )
+)
+
+(defpoll gpu-info :interval "2s"
+  "./scripts/gpuinfo.sh")
+
+
+(defpoll funpoll :interval "100s"
+
+"./scripts/wittr.sh"
+
+)
+(defwidget fun []
+(box
+    :orientation "v"
+    :spacing 10
+    (label
+      :text "${funpoll}"
+    )
+  )
+)
+(defwidget sys-info []
+    (box
+        :orientation "v"
+        :spacing 5
+        :class "thermometer-details"
+
+        (label
+            :class "cpu-temperature"
+            :text "󰍛 ${round(EWW_CPU.avg, 0)}% ${round(EWW_TEMPS.K10TEMP_TCTL, 0)}󰔄")
+        (label
+            :class "gpu-usage"
+            :text "󱡶 ${gpu-info}")
+        (label
+            :class "ram-usage"
+            :text "  ${round(EWW_RAM.used_mem_perc,0)}%")
+    )
+)
