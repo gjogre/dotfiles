@@ -1,27 +1,57 @@
-(defwindow eww-gjogre
 
-           :monitor 0
-           :geometry (geometry
-                    :y "20%"
-                    :x "10px"
-                    :height "95%"
-                    :width "11%"
-                    :anchor "right center"
-                    )
-           :stacking "fg"
-           :exclusive "true"
-           :wm-ignore false
-           :namespace "eww-gjogre-main"
-           :windowtype "dock"
-           (sidepanel)
+ (defwidget top-sidepanel []
+     (box :orientation "v" :space-evenly false
+        :class "top-sidepanel"
+         (clock)
+         (weather)
+     )
  )
 
-(defwidget sidepanel []
-    (box :orientation "v" :space-evenly false
-        (clock)
-        (sys-info)
-        (fun)
-))
+ (defwidget middle-sidepanel []
+
+     (box :orientation "v" :space-evenly false
+        :class "middle-sidepanel"
+        :valign "center"
+        :vexpand true
+        (toggle-suspend)
+     )
+ )
+
+ (defwidget bottom-sidepanel []
+     (box :orientation "v" :space-evenly false
+         :valign "end"
+         :class "bottom-sidepanel"
+         (sys-info)
+     )
+ )
+
+ (defwindow eww-gjogre
+
+            :monitor 0
+            :geometry (geometry
+                     :y "20%"
+                     :x "0"
+                     :height "100%"
+                     :width "11%"
+                     :anchor "right center"
+                     )
+            :stacking "fg"
+            :exclusive "true"
+            :wm-ignore false
+            :namespace "eww-gjogre-main"
+            :windowtype "dock"
+     (box :orientation "v" :space-evenly false
+         (top-sidepanel)
+         (middle-sidepanel)
+         (bottom-sidepanel)
+     )
+  )
+  (defvar hypridlestatus "󱀒")
+
+  (defwidget toggle-suspend []
+    (button :onclick "eww update hypridlestatus=$(./scripts/toggle_hypridle.sh)"
+            :class {hypridlestatus == "󱀒" ? "active" : "suspended"}
+      (label :text "${hypridlestatus}")))
 
 (defpoll time :interval "5s"
     "date +'%H:%M'")
@@ -47,17 +77,17 @@
   "./scripts/gpuinfo.sh")
 
 
-(defpoll funpoll :interval "100s"
+(defpoll weatherpoll :interval "100s"
 
 "./scripts/wittr.sh"
 
 )
-(defwidget fun []
+(defwidget weather []
 (box
     :orientation "v"
     :spacing 10
     (label
-      :text "${funpoll}"
+      :text "${weatherpoll}"
     )
   )
 )
@@ -65,6 +95,7 @@
     (box
         :orientation "v"
         :spacing 5
+        :valign "end"
         :class "thermometer-details"
 
         (label

@@ -67,8 +67,6 @@
   },
   "custom/weather": {
     "exec": "~/.config/waybar/wittr.sh",
-    //"return-type": "json",
-    //"format": "{}",
     "tooltip": false,
     "interval": 900
   },
@@ -80,10 +78,8 @@
     "format": "RAM {}%"
   },
   "temperature": {
-    // "thermal-zone": 2,
     "hwmon-path": "/sys/devices/pci0000:00/0000:00:18.3/hwmon/hwmon2/temp1_input",
     "critical-threshold": 80,
-    // "format-critical": "{temperatureC}°C {icon}",
     "format": "{temperatureC}°C",
     "format-icons": ["", "", ""]
   },
@@ -102,7 +98,6 @@
   },
 
    "network": {
-        // "interface": "wlp2*", // (Optional) To force the use of this interface
         "format-wifi": "{essid} ({signalStrength}%) ",
         "format-ethernet": "󰣺 {bandwidthTotalBytes}",
         "tooltip-format": "{ifname} via {gwaddr} ",
