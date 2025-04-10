@@ -1,111 +1,123 @@
+(defwindow eww-gjogre
+  :monitor 0
+  :geometry (geometry
+              :y "20%"
+              :x "0"
+              :height "100%"
+              :width "11%"
+              :anchor "right center")
+  :stacking "fg"
+  :exclusive "true"
+  :wm-ignore false
+  :namespace "eww-gjogre-main"
+  :windowtype "dock"
+  (box :orientation "v" :space-evenly false
+       (top-sidepanel)
+       (middle-sidepanel)
+       (bottom-sidepanel)))
 
- (defwidget top-sidepanel []
-     (box :orientation "v" :space-evenly false
-        :class "top-sidepanel"
-         (clock)
-         (weather)
-     )
- )
+(defwidget top-sidepanel []
+  (box :orientation "v" :space-evenly false
+       :class "top-sidepanel"
+       (clock)
+       (weather)))
 
- (defwidget middle-sidepanel []
+(defwidget middle-sidepanel []
+  (box :orientation "v" :space-evenly false
+       :class "middle-sidepanel"
+       :valign "center"
+       :vexpand true
+       (workspace-widget)))
 
-     (box :orientation "v" :space-evenly false
-        :class "middle-sidepanel"
-        :valign "center"
-        :vexpand true
-        (toggle-suspend)
-     )
- )
+(defwidget bottom-sidepanel []
+  (box :orientation "v" :space-evenly false
+       :valign "end"
+       :class "bottom-sidepanel"
+       (sys-info)
+       (toggle-suspend)))
 
- (defwidget bottom-sidepanel []
-     (box :orientation "v" :space-evenly false
-         :valign "end"
-         :class "bottom-sidepanel"
-         (sys-info)
-     )
- )
+(defvar hypridlestatus "󱀒")
 
- (defwindow eww-gjogre
+(defwidget toggle-suspend []
+  (button :onclick "eww update hypridlestatus=$(./scripts/toggle_hypridle.sh)"
+          :class {hypridlestatus == "󱀒" ? "active" : "suspended"}
+          (label :text "${hypridlestatus}")))
 
-            :monitor 0
-            :geometry (geometry
-                     :y "20%"
-                     :x "0"
-                     :height "100%"
-                     :width "11%"
-                     :anchor "right center"
-                     )
-            :stacking "fg"
-            :exclusive "true"
-            :wm-ignore false
-            :namespace "eww-gjogre-main"
-            :windowtype "dock"
-     (box :orientation "v" :space-evenly false
-         (top-sidepanel)
-         (middle-sidepanel)
-         (bottom-sidepanel)
-     )
-  )
-  (defvar hypridlestatus "󱀒")
-
-  (defwidget toggle-suspend []
-    (button :onclick "eww update hypridlestatus=$(./scripts/toggle_hypridle.sh)"
-            :class {hypridlestatus == "󱀒" ? "active" : "suspended"}
-      (label :text "${hypridlestatus}")))
-
-(defpoll time :interval "5s"
-    "date +'%H:%M'")
-(defpoll date :interval "20s"
-    "date +'%a %d.%m.%Y'")
+(defpoll time :interval "5s" "date +'%H:%M'")
+(defpoll date :interval "20s" "date +'%a %d.%m.%Y'")
 
 (defwidget clock []
+  (box
+   :orientation "v"
+   :spacing 5
+   (label :class "clock" :valign "start" :text "${time}")
+   (label :class "date" :valign "start" :text "${date}")))
+
+(deflisten workspace-listen
+  :initial "{\"monitors\": [], \"special\": [\"asd\"]}"
+  "./scripts/workspaces.sh")
+
+  (defwidget workspace-widget []
+    (workspace-column :monitor-id "1"))
+
+  (defwidget workspace-column [monitor-id]
     (box
-        :orientation "v"
-        :spacing 5
-        (label
-            :class "clock"
-            :valign "start"
-            :text "${time}")
-        (label
-            :class "date"
-            :valign "start"
-            :text "${date}")
+        :orientation "h"
+        :valign "center"
+        :spacing 10
+        :class "workspace-column"
+        (for monitor in "${workspace-listen?.monitors}"
+            (box
+                :orientation "v"
+                :valign "end"
+                :class "monitor-column"
+                (for ws in "${monitor?.workspaces}"
+                    (label :text "${ws.name}")
+                )
+            )
+        )
     )
 )
 
-(defpoll gpu-info :interval "2s"
-  "./scripts/gpuinfo.sh")
 
 
-(defpoll weatherpoll :interval "100s"
+(defpoll gpu-info :interval "2s" "./scripts/gpuinfo.sh")
 
-"./scripts/wittr.sh"
+(defpoll weatherpoll :interval "100s" "./scripts/wittr.sh")
 
-)
 (defwidget weather []
-(box
-    :orientation "v"
-    :spacing 10
-    (label
-      :text "${weatherpoll}"
-    )
-  )
-)
-(defwidget sys-info []
-    (box
-        :orientation "v"
-        :spacing 5
-        :valign "end"
-        :class "thermometer-details"
+  (box :orientation "v" :spacing 10
+       (label :text "${weatherpoll}")))
 
+(defwidget sys-info []
+  (box
+    :orientation "v"
+    :spacing 5
+    :valign "end"
+    :class "thermometer-details"
+    (box
+        :orientation "h"
+        :valign "start"
+        :halign "center"
+        :class "cpu-temperature"
         (label
-            :class "cpu-temperature"
             :text "󰍛 ${round(EWW_CPU.avg, 0)}% ${round(EWW_TEMPS.K10TEMP_TCTL, 0)}󰔄")
+        )
+    (box
+        :orientation "h"
+        :valign "start"
+        :halign "center"
+        :class "gpu-usage"
         (label
-            :class "gpu-usage"
             :text "󱡶 ${gpu-info}")
+        )
+    (box
+        :orientation "h"
+        :valign "start"
+        :halign "center"
+        :class "ram-usage"
         (label
-            :class "ram-usage"
             :text "  ${round(EWW_RAM.used_mem_perc,0)}%")
+        )
     )
 )
