@@ -27,7 +27,10 @@
        :class "middle-sidepanel"
        :valign "center"
        :vexpand true
-       (workspace-widget)))
+       (workspace-widget)
+       (window-title)
+    )
+)
 
 (defwidget bottom-sidepanel []
   (box :orientation "v" :space-evenly false
@@ -54,7 +57,7 @@
    (label :class "date" :valign "start" :text "${date}")))
 
 (deflisten workspace-listen
-  :initial "{\"monitors\": [], \"special\": [\"asd\"]}"
+  :initial "{\"monitors\": [], \"special\": []}"
   "./scripts/workspaces.sh")
 
   (defwidget workspace-widget []
@@ -71,14 +74,35 @@
                 :orientation "v"
                 :valign "end"
                 :class "monitor-column"
-                (for ws in "${monitor?.workspaces}"
-                    (label :text "${ws.name}")
-                )
+                (workspace-list :wslist "${monitor?.workspaces}")
             )
+        )
+        (box
+            (workspace-list :wslist "${workspace-listen?.special}")
         )
     )
 )
 
+(defwidget window-title []
+    (label
+        :class "window-title"
+        :text "${workspace-listen?.title}"
+    )
+)
+
+(defwidget workspace-list [wslist]
+    (box
+        :class "workspace-list"
+        :orientation "v"
+        :spacing 10
+        (for ws in wslist
+            (label
+                :class `${ws.active == true ? "active" : ""}`
+                :text "${ws.name}"
+            )
+        )
+    )
+)
 
 
 (defpoll gpu-info :interval "2s" "./scripts/gpuinfo.sh")

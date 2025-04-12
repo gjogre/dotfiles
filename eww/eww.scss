@@ -32,6 +32,27 @@ button {
     border: 0;
 }
 
-.monitor-column {
-    background: blue;
+.workspace-list {
+    padding: 0.5rem;
+}
+
+.workspace-list label {
+    padding: 0.4rem 0.8rem;
+    border-radius: 1rem;
+    border: 2px solid #888;
+    color: #ccc;
+    background-color: transparent;
+    font-weight: bolder;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    min-width: 2rem;
+}
+
+.workspace-list label.active {
+    background-color: #000;
+    border-color: #800080;
+}
+
+.window-title {
+    font-size: 8px;
 }

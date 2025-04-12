@@ -32,8 +32,8 @@ parse_workspace_json() {
 
 handle() {
   case $1 in
-    'workspace>>'*) parse_workspace_json;;
-    'focusedmon>>'*) parse_workspace_json;;
+    'workspace>>'*) parse_workspace_json ;;
+    #'focusedmon>>'*) echo "focusedmon $1";;
     'activewindow>>'*) parse_workspace_json;;
   esac
 }
