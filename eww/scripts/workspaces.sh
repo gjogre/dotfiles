@@ -6,7 +6,7 @@ parse_workspace_json() {
 
     echo "$(jq -c -n --argjson ws "$workspaces" --argjson aw "$activewindow" '
         {
-            title: ($aw.initialTitle + " - " + $aw.title),
+            title: ($aw.title),
             special: (
                 $ws
                 | map(select(.id < 0) | .name |= sub("special:"; "")
