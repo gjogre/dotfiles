@@ -1,0 +1,15 @@
+[
+  {
+    "name": "Web Search",
+    "display_name": "Google Search",
+    "tag_start": "{keyword}",
+    "tag_end": "{keyword}",
+    "alias": "gg",
+    "type": "web_launcher",
+    "args": {
+      "search_engine": "google",
+      "icon": "google"
+    },
+    "priority": 100
+  }
+]

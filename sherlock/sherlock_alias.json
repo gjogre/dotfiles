@@ -1,0 +1,14 @@
+{
+  "kitty": {
+    "name": "Terminal",
+    "icon": "terminal"
+  },
+  "Tweaks": {
+    "name": "GTK Settings",
+    "icon": "settings"
+  },
+  "calculator": {
+    "name": "Galculator",
+    "icon": "terminal"
+  }
+}
