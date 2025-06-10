@@ -13,6 +13,3 @@ source = ~/.config/hypr/system_specific/input.conf
 source = ~/.config/hypr/common/gestures.conf
 source = ~/.config/hypr/common/keybindings.conf
 source = ~/.config/hypr/common/windowrules.conf
-
-# GJTV Configuration
-source = ~/.config/hypr/gjtv.conf
