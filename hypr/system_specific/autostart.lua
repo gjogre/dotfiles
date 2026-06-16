@@ -1,0 +1,8 @@
+hl.on("hyprland.start", function()
+    hl.exec_cmd("systemctl enable keyd --now")
+    hl.dispatch(hl.dsp.focus({ workspace = 1 }))
+    hl.exec_cmd("waync & hypridle & hyprpaper")
+    hl.exec_cmd("kitty +kitten panel --edge=left --columns=50 --output-name=DP-4 -o font_size=11 ~/code/widgets/rust-panel/target/release/rust-panel")
+    hl.exec_cmd("~/code/widgets/clockdate/target/release/clockdate")
+    hl.exec_cmd("dbus-run-session -- gnome-keyring-daemon --daemonize --components=pkcs11,secrets")
+end)
