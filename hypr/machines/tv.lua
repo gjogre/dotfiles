@@ -11,7 +11,7 @@ hl.env("HYPRCURSOR_SIZE", "48")
 hl.on("hyprland.start", function()
     hl.exec_cmd("/usr/bin/gnome-keyring-daemon --daemonize --components=pkcs11,secrets,ssh")
     hl.exec_cmd("hyprpaper")
-    hl.exec_cmd("/home/tv/.local/bin/gjtv", { workspace = "special:gjtv", silent = true })
+    hl.exec_cmd("/home/tv/.local/bin/gjtv")
 end)
 
 hl.config({
