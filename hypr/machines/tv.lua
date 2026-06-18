@@ -3,14 +3,14 @@ local fileManager = "dolphin"
 local menu        = "wofi --show drun"
 local mainMod     = "SUPER"
 
-hl.monitor({ output = "", mode = "preferred", position = "auto", scale = "auto" })
+hl.monitor({ output = "", mode = "3840x2160@60", position = "auto", scale = "auto" })
 
 hl.env("XCURSOR_SIZE",    "48")
 hl.env("HYPRCURSOR_SIZE", "48")
 
 hl.on("hyprland.start", function()
     hl.exec_cmd("/usr/bin/gnome-keyring-daemon --daemonize --components=pkcs11,secrets,ssh")
-    hl.exec_cmd("hyprpaper")
+    hl.exec_cmd("swaybg -m fill -i /home/tv/.config/hypr/wallpapers/GJTVWP.png")
     hl.exec_cmd("/home/tv/.local/bin/gjtv")
 end)
 
